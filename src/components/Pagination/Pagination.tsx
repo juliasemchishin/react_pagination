@@ -47,7 +47,11 @@ export const Pagination = ({
             data-cy="pageLink"
             className="page-link"
             href={`#${page}`}
-            onClick={() => onPageChange(page)}
+            onClick={() => {
+              if (page !== currentPage) {
+                onPageChange(page);
+              }
+            }}
           >
             {page}
           </a>

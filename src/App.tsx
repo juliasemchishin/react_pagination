@@ -61,7 +61,7 @@ export const App: React.FC = () => {
 
       {/*Items - список який відображаєтьс на сторінці, змінюється в залежності від вибраної кількості*/}
       <ul>
-        {items.slice(startIndex, calculatedEndIndex).map(item => (
+        {items.slice(startIndex, endIndex).map(item => (
           <li key={item} data-cy="item">
             {item}
           </li>
