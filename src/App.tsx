@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
 import './App.css';
 import { getNumbers } from './utils';
 import { Pagination } from './components/Pagination';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import React from 'react';
 const items = getNumbers(1, 42).map(n => `Item ${n}`);
 
 export const App: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const params = new URLSearchParams(location.search);
-  const pageFromUrl = Number(params.get('page')) || 1;
-  const perPageFromUrl = Number(params.get('perPage')) || 5;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [currentPage, setCurrentPage] = useState(pageFromUrl);
-  const [perPage, setPerPage] = useState(perPageFromUrl);
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const perPage = Number(searchParams.get('perPage')) || 5;
 
-  function udateUrl(page: number, perrPage: number) {
-    navigate(`?page=${page}&perPage=${perrPage}`, { replace: true });
+  function onPageChange(newPage: number): void {
+    const params = new URLSearchParams(searchParams);
+
+    params.set('page', newPage.toString());
+    setSearchParams(params);
   }
 
-  function onPageChange(page: number): void {
-    if (page !== currentPage) {
-      setCurrentPage(page);
-      udateUrl(page, perPage);
-    }
+  function onPerPageChange(newPerPage: number): void {
+    const params = new URLSearchParams(searchParams);
+
+    params.set('perPage', newPerPage.toString());
+    params.set('page', '1');
+    setSearchParams(params);
   }
 
   const startIndex = (currentPage - 1) * perPage;
@@ -46,9 +46,7 @@ export const App: React.FC = () => {
             id="perPageSelector"
             className="form-control"
             onChange={e => {
-              setPerPage(Number(e.target.value));
-              setCurrentPage(1);
-              udateUrl(1, Number(e.target.value));
+              onPerPageChange(Number(e.target.value));
             }}
             value={perPage}
           >
