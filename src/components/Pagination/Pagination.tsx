@@ -16,7 +16,6 @@ export const Pagination = ({
   total,
   perPage,
   currentPage = 1,
-  onPageChange = () => {},
 }: PaginationType) => {
   const pagesAmount = Math.ceil(total / perPage);
   const pagesCountArray: number[] = pagesArray(pagesAmount);
