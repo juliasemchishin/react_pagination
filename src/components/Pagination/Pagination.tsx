@@ -1,4 +1,5 @@
 import { pagesArray } from '../../utils';
+import { Link } from 'react-router-dom';
 
 interface PaginationType {
   total: number;
@@ -23,10 +24,10 @@ export const Pagination = ({
   return (
     <ul className="pagination">
       <li className={currentPage === 1 ? 'page-item disabled' : 'page-item'}>
-        <a
+        <Link
+          to={`/?page=${currentPage - 1}&perPage=${perPage}`}
           data-cy="prevLink"
           className="page-link"
-          href="#prev"
           aria-disabled={currentPage === 1 ? 'true' : 'false'}
           onClick={() => {
             if (currentPage > 1) {
@@ -35,7 +36,7 @@ export const Pagination = ({
           }}
         >
           «
-        </a>
+        </Link>
       </li>
 
       {pagesCountArray.map(page => (
@@ -43,10 +44,10 @@ export const Pagination = ({
           className={page === currentPage ? 'page-item active' : 'page-item'}
           key={page}
         >
-          <a
+          <Link
+            to={`/?page=${page}&perPage=${perPage}`}
             data-cy="pageLink"
             className="page-link"
-            href={`#${page}`}
             onClick={() => {
               if (page !== currentPage) {
                 onPageChange(page);
@@ -54,7 +55,7 @@ export const Pagination = ({
             }}
           >
             {page}
-          </a>
+          </Link>
         </li>
       ))}
       <li
@@ -64,10 +65,10 @@ export const Pagination = ({
             : 'page-item'
         }
       >
-        <a
+        <Link
+          to={`/?page=${currentPage + 1}&perPage=${perPage}`}
           data-cy="nextLink"
           className="page-link"
-          href="#next"
           aria-disabled={
             currentPage === pagesCountArray.length ? 'true' : 'false'
           }
@@ -78,7 +79,7 @@ export const Pagination = ({
           }}
         >
           »
-        </a>
+        </Link>
       </li>
     </ul>
   );

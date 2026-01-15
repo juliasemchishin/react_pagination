@@ -2,16 +2,27 @@ import React, { useState } from 'react';
 import './App.css';
 import { getNumbers } from './utils';
 import { Pagination } from './components/Pagination';
-
+import { useNavigate, useLocation } from 'react-router-dom';
 const items = getNumbers(1, 42).map(n => `Item ${n}`);
 
 export const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(5);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const pageFromUrl = Number(params.get('page')) || 1;
+  const perPageFromUrl = Number(params.get('perPage')) || 5;
+
+  const [currentPage, setCurrentPage] = useState(pageFromUrl);
+  const [perPage, setPerPage] = useState(perPageFromUrl);
+
+  function udateUrl(page: number, perrPage: number) {
+    navigate(`?page=${page}&perPage=${perrPage}`, { replace: true });
+  }
 
   function onPageChange(page: number): void {
     if (page !== currentPage) {
       setCurrentPage(page);
+      udateUrl(page, perPage);
     }
   }
 
@@ -37,6 +48,7 @@ export const App: React.FC = () => {
             onChange={e => {
               setPerPage(Number(e.target.value));
               setCurrentPage(1);
+              udateUrl(1, Number(e.target.value));
             }}
             value={perPage}
           >
